@@ -5,7 +5,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import { Title, Card, Button } from "react-native-paper";
 
-const Profile = () => {
+const Profile = (props) => {
+  const {
+    id,
+    name,
+    picture,
+    phone,
+    salary,
+    email,
+    position,
+  } = props.route.params.item.item;
+
   const openDial = () => {
     if (Platform.OS === "android") {
       Linking.openURL(`tel: 12345`);
@@ -29,14 +39,13 @@ const Profile = () => {
             marginTop: -50,
           }}
           source={{
-            uri:
-              "https://images.unsplash.com/flagged/photo-1578848151039-b8916d7c1c34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1421&q=80",
+            uri: picture,
           }}
         />
       </View>
       <View style={{ alignItems: "center", margin: 15 }}>
-        <Title>Michal</Title>
-        <Text style={{ fontSize: 15 }}>Web Develop</Text>
+        <Title>{name}</Title>
+        <Text style={{ fontSize: 15 }}>{position}</Text>
       </View>
       <Card
         style={styles.myCard}
@@ -45,7 +54,7 @@ const Profile = () => {
         }}>
         <View style={styles.cardContent}>
           <MaterialIcons name="email" size={32} color="#006aff" />
-          <Text style={styles.myText}>abc@abc.com</Text>
+          <Text style={styles.myText}>{email}</Text>
         </View>
       </Card>
       <Card
@@ -55,13 +64,13 @@ const Profile = () => {
         }}>
         <View style={styles.cardContent}>
           <Entypo name="phone" size={32} color="#006aff" />
-          <Text style={styles.myText}>112134123</Text>
+          <Text style={styles.myText}>{phone}</Text>
         </View>
       </Card>
       <Card style={styles.myCard}>
         <View style={styles.cardContent}>
           <MaterialIcons name="attach-money" size={32} color="#006aff" />
-          <Text style={styles.myText}>$100000</Text>
+          <Text style={styles.myText}>{salary}</Text>
         </View>
       </Card>
       <View
