@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import React from "react";
-import { Card } from "react-native-paper";
+import { Card, FAB } from "react-native-paper";
 
 const Home = () => {
   const data = [
@@ -8,11 +8,18 @@ const Home = () => {
     { id: 2, name: "Bogdan", position: "android dev" },
     { id: 3, name: "Jesse", position: "iOs dev" },
     { id: 4, name: "Walt", position: "Ml dev" },
+    { id: 5, name: "Michal", position: "web dev" },
+    { id: 6, name: "Bogdan", position: "android dev" },
+    { id: 7, name: "Jesse", position: "iOs dev" },
+    { id: 8, name: "Walt", position: "Ml dev" },
+    { id: 9, name: "Jesse", position: "iOs dev" },
+    { id: 10, name: "Walt", position: "Ml dev" },
   ];
 
-  const renderList = data.map((item) => {
+  const renderList = (item) => {
+    console.log(item.item);
     return (
-      <Card style={styles.mycard} key={item.id}>
+      <Card style={styles.mycard} key={item.item.id}>
         <View style={styles.cardView}>
           <Image
             style={{ width: 60, height: 50, borderRadius: 30 }}
@@ -22,17 +29,42 @@ const Home = () => {
             }}
           />
           <View style={{ marginLeft: 10 }}>
-            <Text style={styles.text}>{item.name}</Text>
-            <Text style={styles.text}>{item.position}</Text>
+            <Text style={styles.text}>{item.item.name}</Text>
+            <Text style={styles.text}>{item.item.position}</Text>
           </View>
         </View>
       </Card>
     );
-  });
-  return <View>{renderList}</View>;
+  };
+  return (
+    <View>
+      <FlatList
+        data={data}
+        renderItem={(item) => {
+          return renderList(item);
+        }}
+        keyExtractor={(item) => `${item.id}`}
+      />
+      <FAB
+        style={styles.fab}
+        small={false}
+        icon="plus"
+        onPress={() => {
+          console.log("Pressed");
+        }}
+        theme={{ colors: { accent: "#006aff" } }}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
   mycard: {
     margin: 5,
     flexDirection: "row",
