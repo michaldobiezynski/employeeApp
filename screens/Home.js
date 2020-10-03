@@ -15,7 +15,12 @@ const Home = (props) => {
   const renderList = (item) => {
     console.log(item.item);
     return (
-      <Card style={styles.mycard} key={item.item.id}>
+      <Card
+        style={styles.mycard}
+        key={item.item.id}
+        onPress={() => {
+          props.navigation.navigate("Profile");
+        }}>
         <View style={styles.cardView}>
           <Image
             style={{ width: 60, height: 50, borderRadius: 30 }}
