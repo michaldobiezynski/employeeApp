@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import React from "react";
 import { Card, FAB } from "react-native-paper";
 
-const Home = () => {
+const Home = (props) => {
   const data = [
     { id: 1, name: "Michal", position: "web dev" },
     { id: 2, name: "Bogdan", position: "android dev" },
@@ -10,10 +10,6 @@ const Home = () => {
     { id: 4, name: "Walt", position: "Ml dev" },
     { id: 5, name: "Michal", position: "web dev" },
     { id: 6, name: "Bogdan", position: "android dev" },
-    { id: 7, name: "Jesse", position: "iOs dev" },
-    { id: 8, name: "Walt", position: "Ml dev" },
-    { id: 9, name: "Jesse", position: "iOs dev" },
-    { id: 10, name: "Walt", position: "Ml dev" },
   ];
 
   const renderList = (item) => {
@@ -37,7 +33,7 @@ const Home = () => {
     );
   };
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={data}
         renderItem={(item) => {
@@ -50,7 +46,7 @@ const Home = () => {
         small={false}
         icon="plus"
         onPress={() => {
-          console.log("Pressed");
+          props.navigation.navigate("Create");
         }}
         theme={{ colors: { accent: "#006aff" } }}
       />
