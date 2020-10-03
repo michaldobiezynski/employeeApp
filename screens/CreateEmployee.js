@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Modal, Alert } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 import { TextInput, Button } from "react-native-paper";
+import CryptoJS from "crypto-js";
+
+import env from "../env.json";
 
 const CreateEmployee = () => {
   const [name, setName] = useState("");
@@ -24,7 +27,14 @@ const CreateEmployee = () => {
         quality: 0.5,
       });
 
-      console.log(data);
+      if (!data.cancelled) {
+        let newFile = {
+          uri: data.uri,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`,
+        };
+        handleUpload(newFile);
+      }
     }
   };
   const pickFromCamera = async () => {
@@ -39,8 +49,41 @@ const CreateEmployee = () => {
         quality: 0.5,
       });
 
-      console.log(data);
+      if (!data.cancelled) {
+        let newFile = {
+          uri: data.uri,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`,
+        };
+        handleUpload(newFile);
+      }
     }
+  };
+
+  const handleUpload = (image) => {
+    let timestamp = ((Date.now() / 1000) | 0).toString();
+    let api_key = env.API_KEY;
+    let api_secret = env.API_SECRET;
+    let cloud = "dbaft85o1";
+    let hash_string = "timestamp=" + timestamp + api_secret;
+    let signature = CryptoJS.SHA1(hash_string).toString();
+    console.log(api_key);
+    console.log(api_secret);
+    console.log(signature);
+
+    const data = new FormData();
+    data.append("file", image);
+    data.append("timestamp", timestamp);
+    data.append("api_key", api_key);
+    data.append("signature", signature);
+    data.append("upload_preset", "employeeApp");
+    data.append("cloud_name", "dbaft85o1");
+    fetch("https://api.cloudinary.com/v1_1/dbaft85o1/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   };
 
   return (
