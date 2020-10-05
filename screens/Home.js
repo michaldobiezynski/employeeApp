@@ -1,77 +1,35 @@
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { Card, FAB } from "react-native-paper";
 
 const Home = (props) => {
-  const data = [
-    {
-      id: 1,
-      name: "Michal",
-      email: "abc@abc.com",
-      salary: "$1000",
-      phone: "123",
-      position: "web dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-    {
-      id: 2,
-      name: "Bogdan",
-      email: "abc1@abc.com",
-      salary: "$2000",
-      phone: "1234",
-      position: "android dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-    {
-      id: 3,
-      name: "Jesse",
-      email: "abc2@abc.com",
-      salary: "$3000",
-      phone: "1235",
-      position: "iOs dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-    {
-      id: 4,
-      name: "Walt",
-      email: "abc3@abc.com",
-      salary: "$4000",
-      phone: "1236",
-      position: "Ml dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-    {
-      id: 5,
-      name: "Michal",
-      email: "abc4@abc.com",
-      salary: "$5000",
-      phone: "1237",
-      position: "web dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-    {
-      id: 6,
-      name: "Bogdan",
-      email: "abc5@abc.com",
-      salary: "6000",
-      phone: "1238",
-      position: "android dev",
-      picture:
-        "https://images.unsplash.com/photo-1552915170-73c2330ae617?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1100&q=80",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch("http://c32c97f463ea.ngrok.io/")
+      .then((res) => res.json())
+      .then((results) => {
+        setData(results);
+        setLoading(false);
+      });
+    return () => {
+      cleanup;
+    };
+  }, []);
 
   const renderList = (item) => {
     console.log(item.item);
     return (
       <Card
         style={styles.mycard}
-        key={item.item.id}
+        key={item.item._id}
         onPress={() => {
           props.navigation.navigate("Profile", { item });
         }}>
@@ -93,13 +51,18 @@ const Home = (props) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={data}
-        renderItem={(item) => {
-          return renderList(item);
-        }}
-        keyExtractor={(item) => `${item.id}`}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={(item) => {
+            return renderList(item);
+          }}
+          keyExtractor={(item) => `${item._id}`}
+        />
+      )}
+
       <FAB
         style={styles.fab}
         small={false}

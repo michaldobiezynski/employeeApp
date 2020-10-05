@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
 
 import env from "../env.json";
 
-const CreateEmployee = () => {
+const CreateEmployee = ({ navigation }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const CreateEmployee = () => {
   const [modal, setModal] = useState(false);
 
   const submitData = () => {
-    fetch("http://861fb3095e37.ngrok.io/send-data", {
+    fetch("http://c32c97f463ea.ngrok.io/send-data", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +33,8 @@ const CreateEmployee = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        Alert.alert("saved successfully: " + data);
+        navigation.navigate("Home");
       });
   };
 

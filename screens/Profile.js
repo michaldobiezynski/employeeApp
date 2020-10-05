@@ -7,7 +7,7 @@ import { Title, Card, Button } from "react-native-paper";
 
 const Profile = (props) => {
   const {
-    id,
+    _id,
     name,
     picture,
     phone,
@@ -17,7 +17,7 @@ const Profile = (props) => {
   } = props.route.params.item.item;
 
   const openDial = () => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === "andro_") {
       Linking.openURL(`tel: 12345`);
     } else {
       Linking.openURL("telprompt:12345");
@@ -33,7 +33,7 @@ const Profile = (props) => {
       <View style={{ alignItems: "center" }}>
         <Image
           style={{
-            width: 140,
+            w_th: 140,
             height: 140,
             borderRadius: 140 / 2,
             marginTop: -50,
