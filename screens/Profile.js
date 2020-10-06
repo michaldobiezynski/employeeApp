@@ -110,7 +110,17 @@ const Profile = (props) => {
           theme={theme}
           icon="account-edit"
           mode="contained"
-          onPress={() => console.log("Pressed")}>
+          onPress={() =>
+            props.navigation.navigate("Create", {
+              _id,
+              name,
+              picture,
+              phone,
+              salary,
+              email,
+              position,
+            })
+          }>
           Edit
         </Button>
         <Button

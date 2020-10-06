@@ -24,7 +24,6 @@ const Home = (props) => {
   }, []);
 
   const renderList = (item) => {
-    console.log(item.item);
     return (
       <Card
         style={styles.mycard}

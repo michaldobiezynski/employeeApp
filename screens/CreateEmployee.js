@@ -7,13 +7,34 @@ import CryptoJS from "crypto-js";
 
 import env from "../env.json";
 
-const CreateEmployee = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [salary, setSalary] = useState("");
-  const [picture, setPicture] = useState("");
-  const [position, setPosition] = useState("");
+const CreateEmployee = ({ navigation, route }) => {
+  const getDetails = (type) => {
+    if (route.params) {
+      switch (type) {
+        case "name":
+          return route.params.name;
+        case "phone":
+          return route.params.phone;
+        case "email":
+          return route.params.email;
+        case "salary":
+          return route.params.salary;
+        case "picture":
+          return route.params.picture;
+        case "position":
+          return route.params.position;
+      }
+    }
+
+    return "";
+  };
+
+  const [name, setName] = useState(getDetails("name"));
+  const [phone, setPhone] = useState(getDetails("phone"));
+  const [email, setEmail] = useState(getDetails("email"));
+  const [salary, setSalary] = useState(getDetails("salary"));
+  const [picture, setPicture] = useState(getDetails("picture"));
+  const [position, setPosition] = useState(getDetails("position"));
   const [modal, setModal] = useState(false);
 
   const submitData = () => {
@@ -34,6 +55,32 @@ const CreateEmployee = ({ navigation }) => {
       .then((res) => res.json())
       .then((data) => {
         Alert.alert("saved successfully: " + data);
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert("Something went wrong");
+      });
+  };
+
+  const updateData = () => {
+    fetch("http://654c51f582ae.ngrok.io/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: route.params._id,
+        name,
+        phone,
+        email,
+        salary,
+        picture,
+        position,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Alert.alert("Updated successfully: " + data);
         navigation.navigate("Home");
       })
       .catch((error) => {
@@ -163,14 +210,26 @@ const CreateEmployee = ({ navigation }) => {
         onPress={() => setModal(true)}>
         Upload Image
       </Button>
-      <Button
-        style={styles.inputStyle}
-        theme={theme}
-        icon="content-save"
-        mode="contained"
-        onPress={() => submitData()}>
-        Save
-      </Button>
+      {route.params ? (
+        <Button
+          style={styles.inputStyle}
+          theme={theme}
+          icon="content-save"
+          mode="contained"
+          onPress={() => updateData()}>
+          Update
+        </Button>
+      ) : (
+        <Button
+          style={styles.inputStyle}
+          theme={theme}
+          icon="content-save"
+          mode="contained"
+          onPress={() => submitData()}>
+          Save
+        </Button>
+      )}
+
       <Modal
         animationType="slide"
         transparent={true}
