@@ -7,7 +7,7 @@ const Home = (props) => {
   const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
-    fetch("http://654c51f582ae.ngrok.io/")
+    fetch("http://2fa9b1800672.ngrok.io/")
       .then((res) => res.json())
       .then((results) => {
         setData(results);
