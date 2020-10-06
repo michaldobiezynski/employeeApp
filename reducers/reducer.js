@@ -1,9 +1,9 @@
-const initialState = {
+export const initialState = {
   data: [],
   loading: true,
 };
 
-export const reducer = (state = initialState, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case "ADD_DATA":
       return {

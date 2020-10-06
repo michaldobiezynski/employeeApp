@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { createContext, useReducer } from "react";
 import Constants from "expo-constants";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -10,9 +10,11 @@ import CreateEmployee from "./screens/CreateEmployee";
 import Profile from "./screens/Profile";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import { reducer } from "./reducers/reducer";
+import { reducer, initialState } from "./reducers/reducer";
 
-const store = createStore(reducer);
+// const store = createStore(reducer);
+
+export const MyContext = createContext();
 
 const Stack = createStackNavigator();
 
@@ -44,12 +46,13 @@ function App() {
   );
 }
 export default () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <Provider store={store}>
+    <MyContext.Provider value={{ state, dispatch }}>
       <NavigationContainer>
         <App />
       </NavigationContainer>
-    </Provider>
+    </MyContext.Provider>
   );
 };
 const styles = StyleSheet.create({
