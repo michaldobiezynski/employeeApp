@@ -1,27 +1,26 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, Image, FlatList, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Card, FAB } from "react-native-paper";
 
 const Home = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    fetch("http://c32c97f463ea.ngrok.io/")
+
+  const fetchData = () => {
+    fetch("http://654c51f582ae.ngrok.io/")
       .then((res) => res.json())
       .then((results) => {
         setData(results);
         setLoading(false);
+      })
+      .catch((error) => {
+        Alert.alert("Something went wrong");
       });
-    return () => {
-      cleanup;
-    };
+  };
+
+  useEffect(() => {
+    fetchData();
+    return () => {};
   }, []);
 
   const renderList = (item) => {
@@ -51,17 +50,17 @@ const Home = (props) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={(item) => {
-            return renderList(item);
-          }}
-          keyExtractor={(item) => `${item._id}`}
-        />
-      )}
+      <FlatList
+        data={data}
+        renderItem={(item) => {
+          return renderList(item);
+        }}
+        keyExtractor={(item) => `${item._id}`}
+        onRefresh={() => {
+          return fetchData();
+        }}
+        refreshing={loading}
+      />
 
       <FAB
         style={styles.fab}
