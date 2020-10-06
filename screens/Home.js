@@ -1,17 +1,22 @@
 import { StyleSheet, Text, View, Image, FlatList, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Card, FAB } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
 
 const Home = (props) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  const { data, loading } = useSelector((state) => state);
+  const disptach = useDispatch();
 
   const fetchData = () => {
     fetch("http://2fa9b1800672.ngrok.io/")
       .then((res) => res.json())
       .then((results) => {
-        setData(results);
-        setLoading(false);
+        // setData(results);
+        // setLoading(false);
+        disptach({ type: "ADD_DATA", payload: results });
+        disptach({ type: "SET_LOADING", payload: false });
       })
       .catch((error) => {
         Alert.alert("Something went wrong");
@@ -58,7 +63,7 @@ const Home = (props) => {
         onRefresh={() => {
           return fetchData();
         }}
-        refreshing={loading}
+        refreshing={loading !== undefined ? loading : true}
       />
 
       <FAB
