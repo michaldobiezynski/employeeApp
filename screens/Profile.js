@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Image, Linking, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Linking,
+  Platform,
+  Alert,
+} from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
@@ -15,6 +23,25 @@ const Profile = (props) => {
     email,
     position,
   } = props.route.params.item.item;
+  console.log(_id);
+
+  const deleteEmployee = () => {
+    fetch("http://654c51f582ae.ngrok.io/delete", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: _id }),
+    })
+      .then((res) => res.json)
+      .then((deletedEmployee) => {
+        Alert.alert(`${deletedEmployee.name} deleted`);
+        props.navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert("Something went wrong");
+      });
+  };
 
   const openDial = () => {
     if (Platform.OS === "andro_") {
@@ -90,7 +117,7 @@ const Profile = (props) => {
           theme={theme}
           icon="delete"
           mode="contained"
-          onPress={() => console.log("Pressed")}>
+          onPress={() => deleteEmployee()}>
           Fire employee
         </Button>
       </View>
